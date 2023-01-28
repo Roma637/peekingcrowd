@@ -1,12 +1,12 @@
 nodes:
 - input.visual:
-    source: srcs/overhead_2_flipped.mp4
+    source: raws/overhead_3.mp4
 - model.yolo:
     detect: ["person"]
-- dabble.bbox_to_btm_midpoint
+- custom_nodes.dabble.bbox_to_mid_midpoint
 - dabble.zone_count:
     resolution: [848, 480]
-    zones: [[[0.0, 0.0], [1.0, 0.0], [1.0, 0.5], [0.0, 0.5]], [[0.0, 0.5], [1.0, 0.5], [1.0, 1.0], [0.0, 1.0]]]
+    zones: [[[0.0, 0.0], [0.5, 0.0], [0.5, 1.0], [0.0, 1.0]], [[0.5, 0.0], [1.0, 0.0], [1.0, 1.0], [0.5, 1.0]]]
 - draw.bbox
 - draw.btm_midpoint
 - draw.zones
@@ -14,4 +14,4 @@ nodes:
     show: ["zone_count"]
 - output.screen
 - output.media_writer:
-    output_dir: .
+    output_dir: output/

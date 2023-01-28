@@ -13,7 +13,7 @@ def generate_pipeline_file(rows, columns, srcfile, srcresolution):
     source: {srcfile}
 - model.yolo:
     detect: ["person"]
-- dabble.bbox_to_btm_midpoint
+- custom_nodes.dabble.bbox_to_mid_midpoint
 - dabble.zone_count:
     resolution: {srcresolution}
     zones: {zone_coords}
@@ -24,6 +24,6 @@ def generate_pipeline_file(rows, columns, srcfile, srcresolution):
     show: ["zone_count"]
 - output.screen
 - output.media_writer:
-    output_dir: .''')
+    output_dir: output/''')
 
-generate_pipeline_file(1, 2, 'srcs/overhead_2_flipped.mp4', [848, 480])
+generate_pipeline_file(2, 1, 'raws/overhead_3.mp4', [848, 480])
