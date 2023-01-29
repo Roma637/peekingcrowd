@@ -8,6 +8,8 @@ from peekingduck.pipeline.nodes.abstract_node import AbstractNode
 
 import cv2
 
+import numpy as np
+
 class Node(AbstractNode):
     """This is a template class of how to write a node for PeekingDuck.
 
@@ -32,9 +34,28 @@ class Node(AbstractNode):
             outputs (dict): Dictionary with keys "img".
         """
 
+        print(len(inputs["img"]))
         print(inputs["zones"])
         print(inputs["zone_count"])
 
-        result = cv2.cvtColor(inputs["img"], cv2.COLOR_BGR2GRAY)
+        #this code depends on all the zones having the same width
+        #and it also depends on the zone coordinates going topleft, topright, bottomright, bottomleft
+
+        #this pulls out the x value of the topright corner of the first zone in the zones array
+        zone_width = inputs["zones"][0][1][0]
+
+        accumulator = []
+
+        for row in inputs["img"]:
+            acc2 = []
+            for pixel in range(zone_width):
+                acc2.append(pixel)
+            accumulator.append(acc2)
+
+        accumulator = np.array(accumulator)
+        print(accumulator.shape)
+
+        result = cv2.cvtColor(accumulator, cv2.COLOR_BGR2GRAY)
+
         outputs = {"img": result}
         return outputs
