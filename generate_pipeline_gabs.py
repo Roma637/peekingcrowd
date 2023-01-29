@@ -15,15 +15,13 @@ def generate_pipeline_file(rows, columns, srcfile):
     height = int(vid.get(cv2.CAP_PROP_FRAME_HEIGHT))
     width = int(vid.get(cv2.CAP_PROP_FRAME_WIDTH))
 
-    placeholder = '''- output.media_writer:
-    output_dir: output/'''
-
     with open("pipeline_config.yml", "w") as file:
         file.writelines(f'''nodes:
 - input.visual:
     source: {srcfile}
 - model.yolo:
     detect: ["person"]
+- model.csrnet
 - custom_nodes.dabble.bbox_to_mid_midpoint
 - dabble.zone_count:
     resolution: [{width}, {height}]
@@ -31,10 +29,11 @@ def generate_pipeline_file(rows, columns, srcfile):
 - draw.bbox
 - draw.btm_midpoint
 - draw.zones
+- draw.heat_map
 - draw.legend:
     show: ["zone_count"]
-- custom_nodes.draw.img_tint_test
 - output.screen
-''')
+- output.media_writer:
+    output_dir: output/''')
 
-generate_pipeline_file(2, 1, 'raws/overhead_3.mp4')
+generate_pipeline_file(2, 1, 'raws/overhead_5.mp4')

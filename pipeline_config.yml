@@ -1,6 +1,6 @@
 nodes:
 - input.visual:
-    source: raws/overhead_5.mp4
+    source: raws/overhead_3.mp4
 - model.yolo:
     detect: ["person"]
 - custom_nodes.dabble.bbox_to_mid_midpoint
@@ -12,6 +12,5 @@ nodes:
 - draw.zones
 - draw.legend:
     show: ["zone_count"]
+- custom_nodes.draw.img_tint_test
 - output.screen
-- output.media_writer:
-    output_dir: output/
