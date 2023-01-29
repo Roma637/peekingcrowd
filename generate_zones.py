@@ -1,7 +1,7 @@
 def generate_zones(rows, columns):
 	final = []
-	zone_height = round(1 / columns, 3)
-	zone_width = round(1 / rows, 3)
+	zone_height = round((1 / columns), 3)
+	zone_width = round((1 / rows), 3)
 	#format for zone coordinates is top left, top right, bottom right, bottom left
 	for row in range(rows):
 		for col in range(columns):
