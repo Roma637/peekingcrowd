@@ -35,8 +35,10 @@ def generate_pipeline_file(rows, columns, srcfile):
 - draw.btm_midpoint
 - draw.zones
 - draw.legend:
-    show: ["zone_count"]
+    show : ["zone_count"]
 - output.screen
+- output.media_writer:
+    output_dir : output/
 ''')
 
-generate_pipeline_file(3, 3, 'raws/overhead_3.mp4')
+generate_pipeline_file(2,2, 'raws/overhead_3.mp4')
