@@ -28,13 +28,15 @@ def generate_pipeline_file(rows, columns, srcfile):
 - dabble.zone_count:
     resolution: [{width}, {height}]
     zones: {zone_coords}
+- custom_nodes.draw.img_tint_test:
+    rows: {rows}
+    columns: {columns}
 - draw.bbox
 - draw.btm_midpoint
 - draw.zones
 - draw.legend:
     show: ["zone_count"]
-- custom_nodes.draw.img_tint_test
 - output.screen
 ''')
 
-generate_pipeline_file(2, 1, 'raws/overhead_3.mp4')
+generate_pipeline_file(3, 3, 'raws/overhead_3.mp4')

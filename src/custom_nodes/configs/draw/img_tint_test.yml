@@ -9,4 +9,5 @@ input: ["img", "zones", "zone_count"]
 output: ["img"] 
 
 # Optional configs depending on node
-threshold: 0.5 # example
+rows: 1
+columns: 2
