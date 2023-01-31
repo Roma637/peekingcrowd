@@ -6,9 +6,9 @@ nodes:
 - custom_nodes.dabble.bbox_to_mid_midpoint
 - dabble.zone_count:
     resolution: [640, 352]
-    zones: [[[0.0, 0.0], [0.5, 0.0], [0.5, 0.5], [0.0, 0.5]], [[0.0, 0.5], [0.5, 0.5], [0.5, 1.0], [0.0, 1.0]], [[0.5, 0.0], [1.0, 0.0], [1.0, 0.5], [0.5, 0.5]], [[0.5, 0.5], [1.0, 0.5], [1.0, 1.0], [0.5, 1.0]]]
+    zones: [[[0.0, 0.0], [0.5, 0.0], [0.5, 1.0], [0.0, 1.0]], [[0.5, 0.0], [1.0, 0.0], [1.0, 1.0], [0.5, 1.0]]]
 - custom_nodes.draw.img_tint_test:
-    rows: 2
+    rows: 1
     columns: 2
 - draw.bbox
 - draw.btm_midpoint

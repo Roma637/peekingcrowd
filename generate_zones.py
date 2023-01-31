@@ -1,14 +1,14 @@
 def generate_zones(rows, columns):
 	final = []
-	zone_height = round((1 / columns), 3)
-	zone_width = round((1 / rows), 3)
+	zone_height = round((1 / rows), 3)
+	zone_width = round((1 / columns), 3)
 	#format for zone coordinates is top left, top right, bottom right, bottom left
-	for row in range(rows):
-		for col in range(columns):
+	for col in range(columns):
+		for row in range(rows):
 			zone = []
-			zone.append([row * zone_width, col * zone_height])
-			zone.append([(row + 1) * zone_width, col * zone_height])
-			zone.append([(row + 1) * zone_width, (col + 1) * zone_height])
-			zone.append([row * zone_width, (col + 1) * zone_height])
+			zone.append([col * zone_width, row * zone_height])
+			zone.append([(col + 1) * zone_width, row * zone_height])
+			zone.append([(col + 1) * zone_width, (row + 1) * zone_height])
+			zone.append([col * zone_width, (row + 1) * zone_height])
 			final.append(zone)
 	return final

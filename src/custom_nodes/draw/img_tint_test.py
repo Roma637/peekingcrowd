@@ -1,7 +1,3 @@
-"""
-Node template for creating custom nodes.
-"""
-
 from typing import Any, Dict
 
 from peekingduck.pipeline.nodes.abstract_node import AbstractNode
@@ -18,10 +14,6 @@ class Node(AbstractNode):
     def __init__(self, config: Dict[str, Any] = None, **kwargs: Any) -> None:
         super().__init__(config, node_path=__name__, **kwargs)
 
-        # initialize/load any configs and models here
-        # configs can be called by self.<config_name> e.g. self.filepath
-        # self.logger.info(f"model loaded with configs: config")
-
     def run(self, inputs: Dict[str, Any]) -> Dict[str, Any]:  # type: ignore
         """This node tints the image.
 
@@ -32,76 +24,76 @@ class Node(AbstractNode):
             outputs (dict): Dictionary with keys "img".
         """
 
-        # print(len(inputs["img"]))
-
-        print(inputs["zones"])
-        print(inputs["zone_count"])
-        
-        # print(self.config["rows"])
-        # print(self.config["columns"])
-
         #this code depends on 
         # all the zones having the same width
         # the zone coordinates going topleft, topright, bottomright, bottomleft
-        # there only being 1 row and x columns or x rows and 1 column
 
         #SPLIT THE IMAGE
 
         #cut image horizontally
-        vsplit_arr = np.array([(i+1)* len(inputs["img"])//self.config["rows"] for i in range(self.config["rows"])])
+        vsplit_arr = np.array([(i+1) * (len(inputs["img"])//self.config["rows"]) for i in range(self.config["rows"])])
         first_split = np.vsplit(inputs["img"], vsplit_arr)[:-1]
-
-        print(f" LENGTH OF FIRST SPLIT IS {len(first_split)}")
-        print([i.shape for i in first_split])
 
         np_zones = {}
 
-        hsplit_arr = np.array([(i+1)* (first_split[0].shape[1])//self.config["columns"] for i in range(self.config["columns"])])
-        print(hsplit_arr)
+        hsplit_arr = np.array([(i+1) * (first_split[0].shape[1]//self.config["columns"]) for i in range(self.config["columns"])])
 
-        for r in range(len(first_split)):
+        for r in range(self.config["rows"]):
             #cut each strip vertically
             second_split = np.hsplit(first_split[r], hsplit_arr)[:-1]
-
-            print(f" LENGTH OF SECOND SPLIT IS {len(second_split)}")
-            print([i.shape for i in second_split])
-
-            for c in range(len(second_split)):
-                # print(second_split[c])
-                # print(type(second_split[c]))
+            for c in range(self.config["columns"]):
                 np_zones[f"row{r+1}col{c+1}"] = second_split[c]
-                # print(f"just saved row{r+1}col{c+1}")
 
-        print("======= npzones is ========")
-        print(np_zones)
-        print("===========================")
-        
-        for zone in np_zones.values():
-            print(zone.shape)
+        print(np_zones.keys())
+
+        #LOGIC FOR WHICH ZONES TO COLOUR
+
+        #if difference between biggest and smallest zonecount is 1, colour everything green
+        #else, calculate the average? everything above average is red everything below average is blue
+
+        colour_flags = {}
+        zone_names = list(np_zones.keys())
+
+        if abs(max(inputs["zone_count"]) - min(inputs["zone_count"])) <= 1:
+            colour_flags = {zn:'cv2.COLORMAP_DEEPGREEN' for zn in np_zones.keys()}
+        else:
+            average_count = round(sum(inputs["zone_count"]) / len(inputs["zone_count"]), 2)
+
+            for index in range(len(inputs["zone_count"])):
+                zone_name = zone_names[index]
+                if 0<(inputs["zone_count"][index]-average_count)<1:
+                    colour_flags[zone_name] = 'cv2.COLORMAP_HOT'
+                elif inputs["zone_count"][index] > average_count:
+                    colour_flags[zone_name] = 'cv2.COLORMAP_HOT'
+                else:
+                    colour_flags[zone_name] = 'cv2.COLORMAP_OCEAN'
+
+        print(colour_flags)
 
         #COLOUR THE ZONES
 
-        # result = cv2.cvtColor(inputs["img"], cv2.COLOR_BGR2GRAY)
+        for zone in colour_flags:
 
-        #temporary
-        np_zones["row1col1"] = cv2.cvtColor(np_zones["row1col1"], cv2.COLOR_BGR2GRAY)
-        np_zones["row1col1"] = cv2.cvtColor(np_zones["row1col1"], cv2.COLOR_GRAY2BGR)
+            flag = colour_flags[zone]
+
+            np_zones[zone] = cv2.cvtColor(np_zones[zone], cv2.COLOR_BGR2GRAY)
+            np_zones[zone] = cv2.cvtColor(np_zones[zone], cv2.COLOR_GRAY2BGR)
+            
+            if flag=="cv2.COLORMAP_DEEPGREEN":
+                np_zones[zone] = cv2.applyColorMap(np_zones[zone], cv2.COLORMAP_DEEPGREEN)
+            elif flag=="cv2.COLORMAP_HOT":
+                np_zones[zone] = cv2.applyColorMap(np_zones[zone], cv2.COLORMAP_HOT)
+            elif flag=="cv2.COLORMAP_OCEAN":
+                np_zones[zone] = cv2.applyColorMap(np_zones[zone], cv2.COLORMAP_OCEAN)
 
         #PUT IMAGE BACK TOGETHER
 
         temp_rows = {}
 
         for row in range(self.config["rows"]):
-            print(np_zones[f"row{row+1}col1"])
-            print(np_zones[f"row{row+1}col2"])
             temp_rows[f"row{row+1}"] = np.hstack(tuple([np_zones[f"row{row+1}col{col+1}"] for col in range(self.config["columns"])]))
 
-        # print(temp_rows)
-
         result = np.vstack(tuple(temp_rows.values()))
-
-        print(inputs["img"].shape)
-        print(result.shape)
 
         #RETURN
 
