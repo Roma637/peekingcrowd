@@ -8,6 +8,9 @@ def generate_pipeline_file(rows, columns, srcfile):
     #helper function from other file
     zone_coords = generate_zones(rows, columns)
 
+    if srcfile.isdigit():
+        srcfile = int(srcfile)
+
     vid = cv2.VideoCapture(srcfile)
     height = int(vid.get(cv2.CAP_PROP_FRAME_HEIGHT))
     width = int(vid.get(cv2.CAP_PROP_FRAME_WIDTH))
@@ -35,4 +38,4 @@ def generate_pipeline_file(rows, columns, srcfile):
     output_dir : output/
 ''')
 
-generate_pipeline_file(1, 2, 'raws/overhead_3.mp4')
+generate_pipeline_file(1, 2, '0')

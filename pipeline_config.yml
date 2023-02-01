@@ -1,11 +1,11 @@
 nodes:
 - input.visual:
-    source: raws/overhead_3.mp4
+    source: 0
 - model.yolo:
     detect: ["person"]
 - custom_nodes.dabble.bbox_to_mid_midpoint
 - dabble.zone_count:
-    resolution: [640, 352]
+    resolution: [1280, 720]
     zones: [[[0.0, 0.0], [0.5, 0.0], [0.5, 1.0], [0.0, 1.0]], [[0.5, 0.0], [1.0, 0.0], [1.0, 1.0], [0.5, 1.0]]]
 - custom_nodes.draw.img_tint_test:
     rows: 1
