@@ -5,12 +5,7 @@ import cv2
 import numpy as np
 
 class Node(AbstractNode):
-    """This is a template class of how to write a node for PeekingDuck.
-
-    Args:
-        config (:obj:`Dict[str, Any]` | :obj:`None`): Node configuration.
-    """
-
+    
     def __init__(self, config: Dict[str, Any] = None, **kwargs: Any) -> None:
         super().__init__(config, node_path=__name__, **kwargs)
 
@@ -44,7 +39,7 @@ class Node(AbstractNode):
             for c in range(self.config["columns"]):
                 np_zones[f"row{r+1}col{c+1}"] = second_split[c]
 
-        print(np_zones.keys())
+        # print(np_zones.keys())
 
         #LOGIC FOR WHICH ZONES TO COLOUR
 
@@ -68,7 +63,7 @@ class Node(AbstractNode):
                 else:
                     colour_flags[zone_name] = 'cv2.COLORMAP_OCEAN'
 
-        print(colour_flags)
+        # print(colour_flags)
 
         #COLOUR THE ZONES
 

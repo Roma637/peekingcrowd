@@ -38,4 +38,4 @@ def generate_pipeline_file(rows, columns, srcfile):
     output_dir : output/
 ''')
 
-generate_pipeline_file(1, 2, '0')
+generate_pipeline_file(1, 2, 'raws/candidate_2.mp4')
